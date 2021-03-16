@@ -33,10 +33,11 @@ def words(passwordDataBase, tokenVK):
                             for i2 in marks:
                                 i1 = i1.strip(i2)
                             if i1 != "":
-                                if i1 in un_words.keys():
-                                    un_words[str(i1.lower())] = un_words.get(str(i1.lower())) + 1
+                                i2 = i1.lower()
+                                if i2 in un_words.keys():
+                                    un_words[str(i2)] = un_words.get(str(i2)) + 1
                                 else:
-                                    un_words[str(i1.lower())] = 1
+                                    un_words[str(i2)] = 1
         return un_words
 
     un_wordsR = sortWall(walls1, {})
@@ -46,6 +47,7 @@ def words(passwordDataBase, tokenVK):
     with con.cursor() as cursor:
         i = 0
         cursor.execute(f'''TRUNCATE TABLE  topwords;''')
+
         for w in un_wordsR:
             print(f'\r записывается {i + 1} из {leng}', end="", flush=True)
             cursor.execute(f'''INSERT INTO topwords (word, count) VALUES('{w}',{un_wordsR[w]});''')
@@ -53,6 +55,7 @@ def words(passwordDataBase, tokenVK):
 
     con.commit()
     con.close()
+
 
 if len(sys.argv) == 3:
     words(sys.argv[1], sys.argv[2])

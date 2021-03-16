@@ -59,5 +59,6 @@ def words(passwordDataBase, tokenVK):
 
 if len(sys.argv) == 3:
     words(sys.argv[1], sys.argv[2])
+    print()
 else:
     print("Print with me passwordDataBase and tokenVK")

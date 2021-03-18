@@ -90,31 +90,20 @@ def save_data(un_wordsR, con):
 
 
 def main():
-    topWords()
-
-
-def connect1():
     connect('ad3741635a3e27742a193267f4d82b753a16d0d61cb966cd3f103b77b1cff1c0ec12f3457b4278f520e60', 'BoskaData')
-
+    topWords()
 
 args = {
     'owner': 'airflow',
     'start_date': datetime.datetime(2021, 3, 18),
     'retries': 1,
-    'retry_delay': datetime.timedelta(minutes=2),
+    'retry_delay': datetime.timedelta(minutes=1),
     'depends_on_past': False,
 }
 
 with DAG(dag_id='FirstDag', default_args=args, schedule_interval=None) as dag:
-    get_connect = PythonOperator(
-        task_id='connectVKAndBD',
-        python_callable=connect1,
-        dag=dag
-    )
     parse_vk_itis = PythonOperator(
         task_id='topWordsVk',
         python_callable=main,
         dag=dag
     )
-    get_connect.set_upstream(get_connect)
-

@@ -116,5 +116,5 @@ with DAG(dag_id='topWords', default_args=args, schedule_interval=None) as dag:
         python_callable=main,
         dag=dag
     )
-    parse_vk_itis.set_downstream(get_connect)
+    get_connect.set_upstream(get_connect)
 

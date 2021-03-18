@@ -105,7 +105,7 @@ args = {
     'depends_on_past': False,
 }
 
-with DAG(dag_id='topWords', default_args=args, schedule_interval=None) as dag:
+with DAG(dag_id='FirstDag', default_args=args, schedule_interval=None) as dag:
     get_connect = PythonOperator(
         task_id='connectVKAndBD',
         python_callable=connect1,

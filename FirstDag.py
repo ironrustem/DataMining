@@ -5,6 +5,7 @@ import psycopg2
 import airflow
 from airflow import DAG
 import datetime
+from datetime import timedelta
 from airflow.operators.python import PythonOperator
 from airflow.operators.bash import BashOperator
 
@@ -93,15 +94,19 @@ def main():
     connect('ad3741635a3e27742a193267f4d82b753a16d0d61cb966cd3f103b77b1cff1c0ec12f3457b4278f520e60', 'BoskaData')
     topWords()
 
+main()
+
+
 args = {
     'owner': 'airflow',
     'start_date': datetime.datetime(2021, 3, 18),
     'retries': 1,
-    'retry_delay': datetime.timedelta(minutes=1),
+    'schedule_interval': '@daily',
+    'retry_delay': datetime.timedelta(days=1),
     'depends_on_past': False,
 }
 
-with DAG(dag_id='FirstDag', default_args=args, schedule_interval=None) as dag:
+with DAG(dag_id='FirstDag', default_args=args, schedule_interval=timedelta(days=1)) as dag:
     parse_vk_itis = PythonOperator(
         task_id='topWordsVk',
         python_callable=main,

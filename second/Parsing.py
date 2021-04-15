@@ -36,11 +36,18 @@ def parseLinks(logger, loggerN, urlSite, level):
     n5.append(urlSite)
     page = requests.get(urlSite)
     paragraphs = re.findall(r'<a href="(.*?)"', str(page.content))
+
     n = 0
     threads = []
 
+
     print("start: " + urlSite + "  |  n1: " + str(len(paragraphs)))
-    print()
+    # print(str(page.content))
+    # print()
+    # print()
+    # print()
+    # print()
+    # print()
 
     for i in range(len(paragraphs)):
         linkAdd = str(paragraphs[i - 1])
@@ -69,7 +76,7 @@ def parseLinks(logger, loggerN, urlSite, level):
 
             print(linkAdd + "  10")
             logger.debug(urlSite.replace("https://", "").replace("http://", "") + " = " + linkAdd.replace("https://", "").replace("http://", ""))
-            if (level < 3) and not (urlSite == linkAdd) and not linkAdd in urlSite:
+            if (level <= 3) and not (urlSite == linkAdd) and not linkAdd in urlSite:
                 x = threading.Thread(target=parseLinks, args=(logger, loggerN, linkAdd, level))
                 n += 1
                 x.start()
@@ -92,9 +99,9 @@ def main():
 
     logger = logger_connect()
     loggerN = logger_n()
-    url = 'https://www.habr.com'
+    url = 'https://www.apple.com'
     parseLinks(logger, loggerN, url, 0)
 
 
-url = 'https://www.habr.com'
+url = 'https://www.apple.com'
 main()

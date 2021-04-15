@@ -27,7 +27,7 @@ def parseLinks(ng1, g, urlSite, level, urlPast):
 
     level += 1
 
-    fp = urllib.request.urlopen("http://www.python.org")
+    fp = urllib.request.urlopen(urlSite)
     mybytes = fp.read()
     mystr = mybytes.decode("utf8")
     fp.close()

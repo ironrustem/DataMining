@@ -3,6 +3,7 @@ import threading
 import logging
 import requests
 
+n5 = []
 
 def logger_connect():
     logger1 = logging.getLogger("logger_connect")
@@ -32,6 +33,7 @@ def logger_n():
 # url1-past url, use for path in graph
 def parseLinks(logger, loggerN, urlSite, level):
     level += 1
+    n5.append(urlSite)
     page = requests.get(urlSite)
     paragraphs = re.findall(r'<a href="(.*?)"', str(page.content))
     n = 0
@@ -67,7 +69,7 @@ def parseLinks(logger, loggerN, urlSite, level):
 
             print(linkAdd + "  10")
             logger.debug(urlSite.replace("https://", "").replace("http://", "") + " = " + linkAdd.replace("https://", "").replace("http://", ""))
-            if (level < 3) and not (urlSite == linkAdd):
+            if (level < 3) and not (urlSite == linkAdd) and not linkAdd in urlSite:
                 x = threading.Thread(target=parseLinks, args=(logger, loggerN, linkAdd, level))
                 n += 1
                 x.start()

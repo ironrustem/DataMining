@@ -24,7 +24,7 @@ def get_logger():
 # level-level deep
 # url1-past url, use for path in graph
 def parseLinks(ng1, g, urlSite, level, urlPast):
-    print("start: " + urlSite + "|")
+
     level += 1
 
     fp = urllib.request.urlopen("http://www.python.org")
@@ -36,10 +36,11 @@ def parseLinks(ng1, g, urlSite, level, urlPast):
     urlSite1 = urlSite.replace("https://", "")
     urlSite1 = urlSite1.replace("http://", "")
     ng.append(urlSite1)
-
     n = 0
     threads = []
-    print("n1: " + str(len(paragraphs)))
+
+    print("start: " + urlSite + "  |  n1: " + str(len(paragraphs)))
+    print()
     for i in range(len(paragraphs)):
 
         linkAdd = str(paragraphs[i - 1])

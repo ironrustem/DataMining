@@ -1,5 +1,4 @@
-import urllib.request
-from urllib.parse import urlparse
+
 import re
 import threading
 import logging
@@ -8,6 +7,7 @@ from graphviz import Digraph
 import requests
 
 
+ng = []
 
 def get_logger():
     logger1 = logging.getLogger("threading_example")
@@ -29,35 +29,36 @@ def parseLinks(ng1, g, urlSite, level, urlPast):
     level += 1
     page = requests.get(urlSite)
     paragraphs = re.findall(r'<a href="(.*?)"', str(page.content))
-    urlSite1 = urlSite.replace("https://", "")
-    urlSite1 = urlSite1.replace("http://", "")
     n = 0
     threads = []
 
     print("start: " + urlSite + "  |  n1: " + str(len(paragraphs)))
+    ng.append(urlSite)
     print()
     for i in range(len(paragraphs)):
         linkAdd = str(paragraphs[i - 1])
+        print(linkAdd + "  00")
+        if linkAdd.endswith("."):
+            linkAdd = linkAdd[:-1]
+        if urlSite.endswith("/"):
+            urlSite = urlSite[:-1]
+
         if not linkAdd.startswith('#'):
             if not linkAdd.startswith('http'):
                 linkAdd = url + linkAdd
-            linkAdd1 = linkAdd.replace("https://", "")
-            linkAdd1 = linkAdd1.replace("http://", "")
+
+            linkAdd1 = linkAdd.replace("https://", "").replace("http://", "")
+            urlSite1 = urlSite.replace("https://", "").replace("http://", "")
             if linkAdd1.endswith("/"):
                 linkAdd1 = linkAdd1[:-1]
             if urlSite1.endswith("/"):
                 urlSite1 = urlSite1[:-1]
 
+            linkAdd = linkAdd.replace("..", "")
+
             g.edge(urlSite1, linkAdd1)
-
+            print(linkAdd + "  01")
             if (level < 3) and not (urlSite1 == linkAdd1):
-                if (level == 2) and not (urlSite1 in ng):
-                    continue
-                if linkAdd.endswith("/"):
-                    linkAdd = linkAdd[:-1]
-                if urlSite.endswith("/"):
-                    urlSite = urlSite[:-1]
-
                 x = threading.Thread(target=parseLinks, args=(ng1, g, linkAdd, level, urlSite1,))
                 n += 1
                 x.start()
@@ -67,7 +68,6 @@ def parseLinks(ng1, g, urlSite, level, urlPast):
         threads[i].join()
 
     if n > 0:
-        print("n: " + str(n))
         logger.debug(urlSite1)
 
 
@@ -172,6 +172,7 @@ g = Digraph('G', filename='second.gv')
 f = open('threading.log', 'w+')
 f.seek(0)
 f.close()
+
 logger = get_logger()
 url = 'https://www.google.com'
 parseLinks(ng2, g, url, 0, "")

@@ -5,7 +5,9 @@ import threading
 import logging
 from graphviz import Digraph
 
-ng = []
+from lxml import html
+import requests
+
 
 
 def get_logger():
@@ -26,23 +28,16 @@ def get_logger():
 def parseLinks(ng1, g, urlSite, level, urlPast):
 
     level += 1
-
-    fp = urllib.request.urlopen(urlSite)
-    mybytes = fp.read()
-    mystr = mybytes.decode("utf8")
-    fp.close()
-    paragraphs = re.findall(r'<a href="(.*?)"', str(mystr))
-
+    page = requests.get(urlSite)
+    paragraphs = re.findall(r'<a href="(.*?)"', str(page.content))
     urlSite1 = urlSite.replace("https://", "")
     urlSite1 = urlSite1.replace("http://", "")
-    ng.append(urlSite1)
     n = 0
     threads = []
-
+    
     print("start: " + urlSite + "  |  n1: " + str(len(paragraphs)))
     print()
     for i in range(len(paragraphs)):
-
         linkAdd = str(paragraphs[i - 1])
         if not linkAdd.startswith('#'):
             if not linkAdd.startswith('http'):

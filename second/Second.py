@@ -5,7 +5,6 @@ import threading
 import logging
 from graphviz import Digraph
 
-from lxml import html
 import requests
 
 
@@ -34,7 +33,7 @@ def parseLinks(ng1, g, urlSite, level, urlPast):
     urlSite1 = urlSite1.replace("http://", "")
     n = 0
     threads = []
-    
+
     print("start: " + urlSite + "  |  n1: " + str(len(paragraphs)))
     print()
     for i in range(len(paragraphs)):

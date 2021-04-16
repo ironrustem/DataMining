@@ -33,8 +33,8 @@ def logger_n():
 # url-this url
 # level-level deep
 # url1-past url, use for path in graph
-def parseLinks(logger, loggerN, urlSite, level, n5):
-    id = str(uuid.uuid4())
+def parseLinks(logger, loggerN, urlSite, level, n5, urlPast):
+    idP = str(uuid.uuid4())
     level += 1
 
     page = requests.get(urlSite)
@@ -42,13 +42,10 @@ def parseLinks(logger, loggerN, urlSite, level, n5):
 
     n = 0
     threads = []
-
+    n6 = []
+    n5.append(urlSite)
 
     print("start: " + urlSite + "  |  n1: " + str(len(paragraphs)))
-
-    # for i in paragraphs:
-    #     print(paragraphs)
-
     for i in paragraphs:
         linkAdd = str(i[len(i) - 1])
         print(linkAdd + "  00")
@@ -56,7 +53,6 @@ def parseLinks(logger, loggerN, urlSite, level, n5):
             linkAdd = linkAdd[:-1]
         if linkAdd.startswith("."):
             linkAdd = linkAdd[1:]
-        print(linkAdd + "  01")
 
         if not linkAdd.startswith('#'):
             if linkAdd.startswith('//'):
@@ -75,17 +71,29 @@ def parseLinks(logger, loggerN, urlSite, level, n5):
             linkAdd.replace("..", "")
 
             print(linkAdd + "  10")
-            logger.debug(urlSite.replace("https://", "").replace("http://", "") + " = " + linkAdd.replace("https://", "").replace("http://", "") + " = " + id)
-            n5.append(linkAdd)
 
-    for i in n5:
-        if (level <= 3) and not (urlSite == i) and not (i in urlSite):
-            x = threading.Thread(target=parseLinks, args=(logger, loggerN, i, level, n5))
+            n6.append(linkAdd)
+
+    for i in n6:
+        if (level <= 3) and not (urlSite == i) and not (i in n5):
+            ulrPast1 = urlPast.copy()
+            ulrPast1.append(urlSite)
+            x = threading.Thread(target=parseLinks, args=(logger, loggerN, i, level, n5, ulrPast1))
             n += 1
             x.start()
             threads.append(x)
 
-    loggerN.debug(urlSite.replace("https://", "").replace("http://", "") + " = " + str(n))
+        if i in n5:
+            urlPast.append(urlSite)
+            h = len(urlPast)-1
+            for j in range(h):
+                url1 = urlPast[j].replace("https://", "").replace("http://", "")
+                url1 = url1.replace("www.", "")
+                url2 = urlPast[j+1].replace("https://", "").replace("http://", "")
+                url2 = url2.replace("www.", "")
+                logger.debug(url1 + " = " + url2 + " = " + idP)
+
+    # loggerN.debug(urlSite.replace("https://", "").replace("http://", "") + " = " + str(n))
 
     for i in range(len(threads)):
         threads[i].join()
@@ -103,7 +111,7 @@ def main():
     logger = logger_connect()
     loggerN = logger_n()
     url = 'https://www.vk.com'
-    parseLinks(logger, loggerN, url, 0, [])
+    parseLinks(logger, loggerN, url, 0, [], [])
 
 
 url = 'https://www.vk.com'

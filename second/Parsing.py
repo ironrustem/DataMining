@@ -1,9 +1,11 @@
 import re
 import threading
 import logging
+import uuid
+
 import requests
 
-n5 = []
+
 
 def logger_connect():
     logger1 = logging.getLogger("logger_connect")
@@ -31,9 +33,9 @@ def logger_n():
 # url-this url
 # level-level deep
 # url1-past url, use for path in graph
-def parseLinks(logger, loggerN, urlSite, level):
+def parseLinks(logger, loggerN, urlSite, level, n5):
     level += 1
-    n5.append(urlSite)
+
     page = requests.get(urlSite)
     paragraphs = re.findall(r'<a href="(.*?)"', str(page.content))
 
@@ -75,9 +77,10 @@ def parseLinks(logger, loggerN, urlSite, level):
             linkAdd.replace("..", "")
 
             print(linkAdd + "  10")
-            logger.debug(urlSite.replace("https://", "").replace("http://", "") + " = " + linkAdd.replace("https://", "").replace("http://", ""))
-            if (level <= 3) and not (urlSite == linkAdd) and not linkAdd in urlSite:
-                x = threading.Thread(target=parseLinks, args=(logger, loggerN, linkAdd, level))
+            logger.debug(urlSite.replace("https://", "").replace("http://", "") + " = " + linkAdd.replace("https://", "").replace("http://", "") + " = " + str(uuid.uuid4()))
+            if (level <= 3) and not (urlSite == linkAdd) and not (linkAdd in urlSite):
+                n5.append(linkAdd)
+                x = threading.Thread(target=parseLinks, args=(logger, loggerN, linkAdd, level, n5))
                 n += 1
                 x.start()
                 threads.append(x)
@@ -100,7 +103,7 @@ def main():
     logger = logger_connect()
     loggerN = logger_n()
     url = 'https://www.apple.com'
-    parseLinks(logger, loggerN, url, 0)
+    parseLinks(logger, loggerN, url, 0, [])
 
 
 url = 'https://www.apple.com'

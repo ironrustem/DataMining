@@ -78,12 +78,14 @@ def parseLinks(logger, loggerN, urlSite, level, n5):
 
             print(linkAdd + "  10")
             logger.debug(urlSite.replace("https://", "").replace("http://", "") + " = " + linkAdd.replace("https://", "").replace("http://", "") + " = " + str(uuid.uuid4()))
-            if (level <= 3) and not (urlSite == linkAdd) and not (linkAdd in urlSite):
-                n5.append(linkAdd)
-                x = threading.Thread(target=parseLinks, args=(logger, loggerN, linkAdd, level, n5))
-                n += 1
-                x.start()
-                threads.append(x)
+            n5.append(linkAdd)
+
+    for i in n5 :
+        if (level <= 3) and not (urlSite == linkAdd) and not (linkAdd in urlSite):
+            x = threading.Thread(target=parseLinks, args=(logger, loggerN, i, level, n5))
+            n += 1
+            x.start()
+            threads.append(x)
 
     loggerN.debug(urlSite.replace("https://", "").replace("http://", "") + " = " + str(n))
 

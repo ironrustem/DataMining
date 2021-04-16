@@ -46,11 +46,11 @@ def parseLinks(logger, loggerN, urlSite, level, n5):
 
     print("start: " + urlSite + "  |  n1: " + str(len(paragraphs)))
 
-    for i in paragraphs:
-        print(paragraphs)
+    # for i in paragraphs:
+    #     print(paragraphs)
 
     for i in paragraphs:
-        linkAdd = str(paragraphs[len(paragraphs) - 1])
+        linkAdd = str(i[len(i) - 1])
         print(linkAdd + "  00")
         if linkAdd.endswith("/"):
             linkAdd = linkAdd[:-1]

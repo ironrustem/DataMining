@@ -8,7 +8,7 @@ import requests
 def logger_connect():
     logger1 = logging.getLogger("logger_connect")
     logger1.setLevel(logging.DEBUG)
-    fh = logging.FileHandler("threading.log")
+    fh = logging.FileHandler("crawlers.log")
     fmt = '%(message)s'
     formatter = logging.Formatter(fmt)
     fh.setFormatter(formatter)
@@ -19,7 +19,7 @@ def logger_connect():
 def logger_n():
     loggerN = logging.getLogger("logger_n")
     loggerN.setLevel(logging.DEBUG)
-    fh = logging.FileHandler("threadingN.log")
+    fh = logging.FileHandler("trueURL.log")
     fmt = '%(message)s'
     formatter = logging.Formatter(fmt)
     fh.setFormatter(formatter)
@@ -105,7 +105,6 @@ def main():
 
     logger = logger_connect()
     loggerN = logger_n()
-    url = 'https://www.vk.com'
     parseLinks(logger, loggerN, url, 0, [], [])
 
 

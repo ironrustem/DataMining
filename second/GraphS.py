@@ -4,16 +4,15 @@ from graphviz import Digraph
 def setGraph():
     g = Digraph('G', filename='second.gv')
 
-    # handle1 = open("threading.log", "r")
-    # connect = {}
-    # for line in handle1:
-    #     if line:
-    #         if not line.split("\n")[0].split(" ")[0] in connect.keys():
-    #             connect[line.split("\n")[0].split(" ")[0]] = []
-    #         connect[line.split("\n")[0].split(" ")[0]].append(line.split("\n")[0].split(" ")[2])
-    # handle1.close()
+    handle1 = open("trueURL.log", "r")
+    c = []
+    for line in handle1:
+        if line:
+            c.append(line.split("\n")[0].split(" ")[0])
+    handle1.close()
 
-    handle2 = open("threading.log", "r")
+    handle2 = open("crawlers.log", "r")
+    c = set(c)
     crawler = {}
     for line in handle2:
         if line:
@@ -33,7 +32,6 @@ def setGraph():
         for j in arr:
             link1 = j[0]
             link2 = j[1]
-            # print("link1: " + link1 + " link2: " + link2)
             if not (link1 in connectsN.keys()):
                 if not (link1 in connects.keys()):
                     connects[link1] = []
@@ -46,7 +44,8 @@ def setGraph():
 
     for i in connects.keys():
         for j in connects[i]:
-            g.edge(i, j)
+            if (i in c) and (j in c):
+                g.edge(i, j)
 
 
     g.view()

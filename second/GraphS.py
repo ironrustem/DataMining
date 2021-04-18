@@ -10,6 +10,7 @@ def matrixMultiply(vector, G, b, eVector):
         result.append((b * total) + eVector)
     return result
 
+
 def setGraph():
     g = Digraph('G', filename='second.gv')
 
@@ -19,9 +20,9 @@ def setGraph():
         if line:
             c.append(line.split("\n")[0].split(" ")[0])
     handle1.close()
+    c = set(c)
 
     handle2 = open("crawlers.log", "r")
-    c = set(c)
     crawler = {}
     for line in handle2:
         if line:
@@ -31,12 +32,11 @@ def setGraph():
             crawler[line1.split(" ")[4]].append((line1.split(" ")[0], line1.split(" ")[2]))
     handle2.close()
 
+    
     connects = {}
     connectsN = {}
     for i in crawler.keys():
         arr = crawler[i]
-        print(arr)
-        print()
         ch = []
         for j in arr:
             link1 = j[0]
@@ -72,30 +72,19 @@ def setGraph():
                 n2 = forNumber[j]
                 matrix[n1][n2] += 1
 
-    for i3 in range(len(matrix)):
-        for j3 in range(len(matrix[i3])):
-            print(str(matrix[i3][j3]), end=' ')
-        print()
-
     for i1 in range(len(matrix)):
         t = 0
         for j in range(len(matrix[i1])):
             t += matrix[j][i1]
-        print("t: " + str(t))
+        print(t)
         for j in range(len(matrix[i1])):
             if (matrix[j][i1] > 0):
                 matrix[j][i1] = matrix[j][i1] / t
-
-    for i3 in range(len(matrix)):
-        for j3 in range(len(matrix[i3])):
-            print(str(matrix[i3][j3]), end=' ')
-        print()
 
     v = []
     for i in range(len(matrix)):
         v.append(float(1 / len(matrix)))
 
-    print("111")
     e = float(1 - 0.85) / len(matrix)
     v1 = matrixMultiply(v, matrix, 0.85, e)
     v2 = matrixMultiply(v1, matrix, 0.85, e)

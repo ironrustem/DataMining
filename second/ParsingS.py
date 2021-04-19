@@ -16,22 +16,11 @@ def logger_connect():
     return logger1
 
 
-def logger_n():
-    loggerN = logging.getLogger("logger_n")
-    loggerN.setLevel(logging.DEBUG)
-    fh = logging.FileHandler("trueURL.log")
-    fmt = '%(message)s'
-    formatter = logging.Formatter(fmt)
-    fh.setFormatter(formatter)
-    loggerN.addHandler(fh)
-    return loggerN
-
-
 # g-graph
 # url-this url
 # level-level deep
 # url1-past url, use for path in graph
-def parseLinks(logger, loggerN, urlSite, level, urlPast):
+def parseLinks(logger, urlSite, level, urlPast):
     idP = str(uuid.uuid4())
     level += 1
     page = requests.get(urlSite)
@@ -73,21 +62,14 @@ def parseLinks(logger, loggerN, urlSite, level, urlPast):
             n6.append(linkAdd)
 
     for i in n6:
-        if (level <= 3) and not (urlSite == i) and not (i in urlPast):
+        if (level <= 2) and not (urlSite == i) and not (i in urlPast):
             print(i)
             ulrPast1 = urlPast.copy()
             ulrPast1.append(urlSite)
-            x = threading.Thread(target=parseLinks, args=(logger, loggerN, i, level, ulrPast1))
+            x = threading.Thread(target=parseLinks, args=(logger, i, level, ulrPast1))
             n += 1
             x.start()
             threads.append(x)
-
-        if i in urlPast:
-            urlPast.append(urlSite)
-            for j in urlPast:
-                url1 = j.replace("https://", "").replace("http://", "")
-                url1 = url1.replace("www.", "").split("?")[0]
-                loggerN.debug(url1)
 
     for i in range(len(threads)):
         threads[i].join()
@@ -97,15 +79,9 @@ def main():
     f = open('crawlers.log', 'w+')
     f.seek(0)
     f.close()
-
-    f = open('trueURL.log', 'w+')
-    f.seek(0)
-    f.close()
-
     logger = logger_connect()
-    loggerN = logger_n()
-    parseLinks(logger, loggerN, url, 0, [])
+    parseLinks(logger, url, 0, [])
 
 
-url = 'https://www.vk.com'
+url = 'https://www.google.com'
 main()

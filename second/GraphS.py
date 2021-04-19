@@ -14,14 +14,6 @@ def matrixMultiply(vector, G, b, eVector):
 def setGraph():
     g = Digraph('G', filename='second.gv')
 
-    handle1 = open("trueURL.log", "r")
-    c = []
-    for line in handle1:
-        if line:
-            c.append(line.split("\n")[0].split(" ")[0])
-    handle1.close()
-    c = set(c)
-
     handle2 = open("crawlers.log", "r")
     crawler = {}
     for line in handle2:
@@ -32,7 +24,6 @@ def setGraph():
             crawler[line1.split(" ")[4]].append((line1.split(" ")[0], line1.split(" ")[2]))
     handle2.close()
 
-    
     connects = {}
     connectsN = {}
     for i in crawler.keys():
@@ -50,10 +41,12 @@ def setGraph():
         for j in set(ch):
             connectsN[j] = 1
 
+    c = connectsN.keys()
     forNumber = {}
     g1 = 0
     for i in set(c):
         forNumber[i] = g1
+        print(i)
         g1 += 1
 
     # add 0 in matrix
@@ -76,7 +69,6 @@ def setGraph():
         t = 0
         for j in range(len(matrix[i1])):
             t += matrix[j][i1]
-        print(t)
         for j in range(len(matrix[i1])):
             if (matrix[j][i1] > 0):
                 matrix[j][i1] = matrix[j][i1] / t

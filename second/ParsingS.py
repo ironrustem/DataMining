@@ -72,6 +72,7 @@ def parseLinks(logger, urlSite, level, urlPast):
             threads.append(x)
 
     for i in range(len(threads)):
+        
         threads[i].join()
 
 

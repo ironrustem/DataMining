@@ -53,16 +53,12 @@ def parseLinks(logger, urlSite, level, urlPast):
                 urlSite = urlSite[:-1]
             linkAdd.replace("..", "")
 
-            url1 = urlSite.replace("https://", "").replace("http://", "")
-            url1 = url1.replace("www.", "").split("?")[0]
-            url2 = linkAdd.replace("https://", "").replace("http://", "")
-            url2 = url2.replace("www.", "").split("?")[0]
-            logger.debug(url1 + " = " + url2 + " = " + idP)
+
 
             n6.append(linkAdd)
 
     for i in n6:
-        if (level <= 2) and not (urlSite == i) and not (i in urlPast):
+        if (level <= 4) and not (urlSite == i) and not (i in urlPast):
             print(i)
             ulrPast1 = urlPast.copy()
             ulrPast1.append(urlSite)
@@ -71,8 +67,16 @@ def parseLinks(logger, urlSite, level, urlPast):
             x.start()
             threads.append(x)
 
+        if i in urlPast:
+            urlPast.append(urlSite)
+            for j in range(len(urlPast) - 1):
+                url1 = urlPast[j].replace("https://", "").replace("http://", "")
+                url1 = url1.replace("www.", "").split("?")[0]
+                url2 = urlPast[j+1].replace("https://", "").replace("http://", "")
+                url2 = url2.replace("www.", "").split("?")[0]
+                logger.debug(url1 + " = " + url2 + " = " + idP)
+
     for i in range(len(threads)):
-        
         threads[i].join()
 
 
@@ -84,5 +88,6 @@ def main():
     parseLinks(logger, url, 0, [])
 
 
-url = 'https://www.google.com'
+url = 'https://www.vk.com'
 main()
+

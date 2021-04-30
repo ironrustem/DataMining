@@ -3,7 +3,7 @@ from time import sleep
 
 
 def setRandom():
-    sleep(0.2)
+    # sleep(0.2)
     ran = random.randint(0, 1000)
     return ran
 
@@ -11,7 +11,8 @@ def setRandom():
 def setRandomArray(c):
     ran = []
     for j in range(c):
-        ran1 = random.randint(0, 1000)
+        # sleep(0.2)
+        ran1 = random.randint(0, len(base) - 1)
         ran.append([ran1, 0])
     return ran
 
@@ -51,37 +52,39 @@ def zero_moment(arr):
     return max2
 
 
-def addToSecond(x1):
+def addToSecond(x1, n1):
     for j in setFor2a1:
-        if x1 == j[0]:
-            j[1] += 1
+        if j[0] >= n1:
+            if base[x1] == base[j[0]]:
+                j[1] += 1
     for j in setFor2b1:
-        if x1 == j[0]:
-            j[1] += 1
+        if j[0] >= n1:
+            if base[x1] == base[j[0]]:
+                j[1] += 1
 
 
 def getSecond(g):
     sumG = 0
     if g == "a":
         for j in setFor2a1:
-            sumG += (2 * j[1] - 1) * n
+            sumG += ((2 * j[1]) - 1) * n
         return sumG / a
     else:
         for j in setFor2b1:
-            sumG += (2 * j[1] - 1) * n
+            sumG += ((2 * j[1]) - 1) * n
         return sumG / b
 
 
-def forPrint():
-    print(
-        f'\r zero: {str(zero_moment(base))}   first: {str(len(base))}   secondA: {getSecond("a")}   secondB: {getSecond("b")}',
-        end="", flush=True)
+def forPrint(finish):
+    if finish:
+        print(
+            f'\r zero: {str(zero_moment(base))}   first: {str(len(base))}   secondA: {getSecond("a")}   secondB: {getSecond("b")}',
+            end="", flush=True)
+    else:
+        print(
+            f'\r zero: {str(zero_moment(base))}   first: {str(len(base))}',
+            end="", flush=True)
 
-
-a = 100
-b = 500
-setFor2a1 = setRandomArray(a)
-setFor2b1 = setRandomArray(b)
 
 base = []
 n = 0
@@ -96,13 +99,20 @@ while True:
 
     base.append(x)
     sumN = sumN1
-    addToSecond(x)
-
     if n % 10 == 0:
-        forPrint()
+        forPrint(False)
 
+a = 100
+b = 500
+setFor2a1 = setRandomArray(a)
+setFor2b1 = setRandomArray(b)
+
+n2 = 0
+for i in base:
+    addToSecond(i, n2)
+    n += 1
 
 h = 1000000 - sumN
 base.append(h)
-addToSecond(x)
-forPrint()
+addToSecond(x, n2 + 1)
+forPrint(True)

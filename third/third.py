@@ -3,7 +3,7 @@ from time import sleep
 
 
 def setRandom():
-    # sleep(0.2)
+    sleep(0.2)
     ran = random.randint(0, 1000)
     return ran
 
@@ -11,7 +11,7 @@ def setRandom():
 def setRandomArray(c):
     ran = []
     for j in range(c):
-        # sleep(0.2)
+        sleep(0.2)
         ran1 = random.randint(0, len(base) - 1)
         ran.append([ran1, 0])
     return ran
